@@ -38,8 +38,8 @@ const SignupForm = () => {
     if (Object.keys(errors).length === 0) {
       const res = await dispatch(signupUser(formData));
       if (!res.error) {
-        navigate("/");
-        toast.success("Account created successfully!");
+        toast.success("Account created successfully. Please sign in.");
+        navigate("/signin");
       }
     } else {
       toast.error("Please enter valid data!");
@@ -62,10 +62,9 @@ const SignupForm = () => {
         <div
           className="col-md-6 d-none d-md-flex justify-content-center align-items-center p-0"
           style={{
-            backgroundImage: `url('https://plus.unsplash.com/premium_photo-1677094310956-7f88ae5f5c6b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fGF1dGhlbnRpY2F0aW9uJTIwYXZhdGFyfGVufDB8fDB8fHww')`,
+            backgroundImage: `url('https://plus.unsplash.com/premium_photo-1677094310956-7f88ae5f5c6b?w=600&auto=format&fit=crop&q=60')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            padding: "10px",
           }}
         ></div>
 

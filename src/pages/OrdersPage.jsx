@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchOrders,
   cancelOrder,
-  returnOrder,
   deleteOrder,
+  returnOrder,
 } from "../redux/slices/ordersSlice";
 import {
   FaShoppingCart,
@@ -12,16 +12,15 @@ import {
   FaCheckCircle,
   FaTimesCircle,
 } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import { useNavigate } from "react-router-dom";
 
 const OrdersPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const orders = useSelector((state) => state.orders.items || []);
-  const loading = useSelector((state) => state.orders.loading || false);
-  const error = useSelector((state) => state.orders.error || null);
+  const orders = useSelector((state) => state.orders.items);
+  const loading = useSelector((state) => state.orders.loading);
+  const error = useSelector((state) => state.orders.error);
   const user = useSelector((state) => state.auth.user);
 
   const [returnReason, setReturnReason] = useState("");
@@ -29,11 +28,11 @@ const OrdersPage = () => {
 
   useEffect(() => {
     if (!user) {
-      toast.warning("Please log in to view your orders");
+      toast.warning("Please log in to view orders");
       navigate("/signin");
-      return;
+    } else {
+      dispatch(fetchOrders(user.uid));
     }
-    dispatch(fetchOrders(user.uid));
   }, [dispatch, user, navigate]);
 
   const getStatusIcon = (status) => {
@@ -62,63 +61,58 @@ const OrdersPage = () => {
     }
   };
 
-  const handleCancelOrder = async (id) => {
+  const handleCancelOrder = (id) => {
     if (window.confirm("Are you sure you want to cancel this order?")) {
-      try {
-        await dispatch(cancelOrder(id)).unwrap();
-        toast.success("Order cancelled successfully");
-      } catch (error) {
-        toast.error(error.message || "Failed to cancel order");
-      }
+      dispatch(cancelOrder(id)).then((res) => {
+        if (res.meta.requestStatus === "fulfilled") {
+          toast.success("Order cancelled successfully");
+        } else {
+          toast.error(res.payload || "Failed to cancel order");
+        }
+      });
     }
   };
 
-  const handleReturnOrder = async () => {
-    if (!selectedOrder) {
-      toast.warning("Please select an order to return");
-      return;
-    }
-    if (!returnReason.trim()) {
-      toast.warning("Please provide a reason for return");
-      return;
-    }
-    try {
-      await dispatch(
-        returnOrder({ orderId: selectedOrder.id, reason: returnReason })
-      ).unwrap();
-      toast.success("Order returned successfully");
-      setReturnReason("");
-      setSelectedOrder(null);
-      const closeButton = document.querySelector(
-        '#returnOrderModal [data-bs-dismiss="modal"]'
-      );
-      closeButton?.click();
-    } catch (error) {
-      toast.error(error.message || "Failed to return order");
+  const handleDeleteOrder = (id) => {
+    if (window.confirm("Are you sure you want to delete this order?")) {
+      dispatch(deleteOrder(id)).then((res) => {
+        if (res.meta.requestStatus === "fulfilled") {
+          toast.success("Order deleted successfully");
+        } else {
+          toast.error(res.payload || "Failed to delete order");
+        }
+      });
     }
   };
 
-  const handleDeleteOrder = async (id) => {
-    if (
-      window.confirm("Are you sure you want to delete this order permanently?")
-    ) {
-      try {
-        await dispatch(deleteOrder(id)).unwrap();
-        toast.success("Order deleted successfully");
-      } catch (error) {
-        toast.error(error.message || "Failed to delete order");
+  const handleReturnOrder = () => {
+    if (!selectedOrder) return toast.warning("No order selected");
+    if (!returnReason.trim())
+      return toast.warning("Please enter return reason");
+
+    dispatch(
+      returnOrder({ orderId: selectedOrder.id, reason: returnReason })
+    ).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") {
+        toast.success("Order returned successfully");
+        setReturnReason("");
+        setSelectedOrder(null);
+        document
+          .querySelector('#returnOrderModal [data-bs-dismiss="modal"]')
+          ?.click();
+      } else {
+        toast.error(res.payload || "Failed to return order");
       }
-    }
+    });
   };
 
   return (
     <div className="container mt-5">
-      <h2 className="mb-4 text-primary border-bottom pb-2">My Orders</h2>
+      <h2 className="text-primary mb-4">My Orders</h2>
+
       {loading ? (
         <div className="text-center my-5">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
+          <div className="spinner-border text-primary" role="status"></div>
         </div>
       ) : error ? (
         <div className="alert alert-danger">{error}</div>
@@ -126,30 +120,29 @@ const OrdersPage = () => {
         <div className="text-center my-5">
           <img
             src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
-            alt="Empty Cart"
-            className="mb-3"
-            style={{ width: "120px", opacity: 0.8 }}
+            alt="No Orders"
+            style={{ width: "100px", opacity: 0.7 }}
           />
-          <h5 className="text-muted">No orders found. Start shopping now!</h5>
+          <h5 className="mt-3 text-muted">No orders found.</h5>
         </div>
       ) : (
         <div className="row">
           {orders.map((order) => (
-            <div key={order.id} className="col-md-6 mb-4">
-              <div className="card shadow border-0">
+            <div className="col-md-6 mb-4" key={order.id}>
+              <div className="card shadow-sm h-100">
                 <div className="card-body">
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h5 className="mb-0">Order #{order.id}</h5>
+                  <div className="d-flex justify-content-between">
+                    <h5>Order #{order.id}</h5>
                     <span
                       className={`badge bg-${getStatusColor(order.status)}`}
                     >
                       {getStatusIcon(order.status)} {order.status}
                     </span>
                   </div>
-                  <small className="text-muted d-block mb-2">
+                  <small className="text-muted">
                     Placed on: {new Date(order.createdAt).toLocaleDateString()}
                   </small>
-                  <div className="table-responsive">
+                  <div className="table-responsive mt-3">
                     <table className="table table-sm">
                       <thead>
                         <tr>
@@ -159,15 +152,15 @@ const OrdersPage = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {order.items.map((item, index) => (
-                          <tr key={index}>
+                        {order.items.map((item, i) => (
+                          <tr key={i}>
                             <td>{item.title}</td>
                             <td>{item.quantity}</td>
                             <td>₹{item.price.toLocaleString()}</td>
                           </tr>
                         ))}
                         <tr>
-                          <td colSpan="2" className="text-end fw-bold">
+                          <td colSpan="2" className="fw-bold text-end">
                             Total:
                           </td>
                           <td className="fw-bold">
@@ -177,13 +170,15 @@ const OrdersPage = () => {
                       </tbody>
                     </table>
                   </div>
-                  <div className="mt-3 d-flex flex-wrap gap-2">
+
+                  <div className="d-flex flex-wrap gap-2 mt-3">
                     <button
                       className="btn btn-sm btn-outline-primary"
                       onClick={() => navigate(`/order/${order.id}`)}
                     >
                       View Details
                     </button>
+
                     {order.status === "pending" && (
                       <>
                         <button
@@ -223,21 +218,17 @@ const OrdersPage = () => {
         className="modal fade"
         id="returnOrderModal"
         tabIndex="-1"
-        aria-labelledby="returnOrderModalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="returnOrderModalLabel">
-                Return Order
-              </h5>
+              <h5 className="modal-title">Return Order</h5>
               <button
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              />
             </div>
             <div className="modal-body">
               <textarea
@@ -249,18 +240,10 @@ const OrdersPage = () => {
               />
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
+              <button className="btn btn-secondary" data-bs-dismiss="modal">
                 Close
               </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleReturnOrder}
-              >
+              <button className="btn btn-primary" onClick={handleReturnOrder}>
                 Submit
               </button>
             </div>

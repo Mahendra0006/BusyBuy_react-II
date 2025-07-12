@@ -15,8 +15,7 @@ let initialAuthState = {
   error: null,
 };
 
-// Check if there's a user in localStorage
-const savedUser = localStorage.getItem('user');
+const savedUser = localStorage.getItem("user");
 if (savedUser) {
   initialAuthState.user = JSON.parse(savedUser);
 }
@@ -26,12 +25,10 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }, thunkAPI) => {
     try {
-      // Validate input
       if (!email || !password) {
         throw new Error("Email and password are required");
       }
 
-      // Attempt to sign in
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email.trim(),
@@ -40,7 +37,6 @@ export const loginUser = createAsyncThunk(
 
       return userCredential.user;
     } catch (err) {
-      // Handle specific Firebase auth errors
       let errorMessage = "Login failed";
       if (err.code === "auth/invalid-email") {
         errorMessage = "Invalid email address";
@@ -62,7 +58,6 @@ export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async ({ email, password, name }, thunkAPI) => {
     try {
-      // Validate input
       if (!email || !password || !name) {
         throw new Error("All fields are required");
       }
@@ -70,7 +65,6 @@ export const signupUser = createAsyncThunk(
         throw new Error("Password must be at least 6 characters");
       }
 
-      // Create user
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email.trim(),
@@ -78,21 +72,14 @@ export const signupUser = createAsyncThunk(
       );
       const user = userCredential.user;
 
-      // Save extra user data to Firestore
       await setDoc(doc(db, "users", user.uid), {
         name,
         email,
         createdAt: serverTimestamp(),
       });
 
-      // Return user data with additional info
-      return {
-        user,
-        name,
-        email,
-      };
+      return { email, name }; // Not logging in automatically
     } catch (err) {
-      // Handle specific Firebase auth errors
       let errorMessage = "Signup failed";
       if (err.code === "auth/email-already-in-use") {
         errorMessage = "Email already registered";
@@ -107,7 +94,7 @@ export const signupUser = createAsyncThunk(
   }
 );
 
-// Async thunk for user logout
+// Async thunk for logout
 export const logoutUser = createAsyncThunk(
   "auth/logoutUser",
   async (_, thunkAPI) => {
@@ -142,10 +129,10 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(signupUser.fulfilled, (state, action) => {
+      .addCase(signupUser.fulfilled, (state) => {
         state.loading = false;
-        state.user = action.payload;
         state.error = null;
+        // Don't set user after signup
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
@@ -167,28 +154,22 @@ const authSlice = createSlice({
   },
 });
 
-// Export the reducer
 export default authSlice.reducer;
 
-// Export a function to initialize auth state listener
 export const initializeAuthListener = (store) => {
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in
       store.dispatch({
-        type: 'auth/setUser',
-        payload: user
+        type: "auth/setUser",
+        payload: user,
       });
-      // Save user to localStorage
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem("user", JSON.stringify(user));
     } else {
-      // User is signed out
       store.dispatch({
-        type: 'auth/setUser',
-        payload: null
+        type: "auth/setUser",
+        payload: null,
       });
-      // Clear localStorage
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
     }
   });
 };

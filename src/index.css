@@ -33,6 +33,11 @@ body {
   transition: all 0.3s ease;
 }
 
+.btn:hover {
+  transform: scale(1.03);
+  transition: all 0.3s ease;
+}
+
 .navbar-brand span {
   font-size: 1.4rem;
   font-weight: 700;
@@ -233,6 +238,12 @@ body {
   height: 60px;
   object-fit: cover;
   border-radius: 4px;
+}
+.order-card {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 /* Authentication Pages */

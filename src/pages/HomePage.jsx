@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../styles/productCards.css";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "../redux/slices/cartSlice";
 import { fetchProducts } from "../redux/slices/productsSlice";
@@ -225,23 +226,27 @@ const HomePage = () => {
                     </div>
 
                     {/* Card Body */}
-                    <div className="card-body d-flex flex-column p-3">
+                    <div className="card-body d-flex flex-column">
                       <h5 className="card-title text-truncate fw-semibold text-dark">
                         {product.title}
                       </h5>
-                      <p className="card-text text-muted small mb-2 text-truncate">
+                      <p className="card-text text-muted small">
                         {product.description}
                       </p>
-                      <div className="d-flex justify-content-between align-items-center mt-auto">
-                        <span className="badge text-white px-3 py-2 rounded-pill">
-                          ₹{product.price}
-                        </span>
-                        <button
-                          className="btn btn-outline-primary btn-sm px-3 rounded-pill"
-                          onClick={() => handleAddToCart(product)}
-                        >
-                          Add to Cart
-                        </button>
+                      <div className="bottom-section">
+                        <div className="price-container">
+                          <span className="price-badge text-white">
+                            ₹{product.price.toLocaleString()}
+                          </span>
+                        </div>
+                        <div className="button-container">
+                          <button
+                            className="btn add-to-cart-btn rounded-pill"
+                            onClick={() => handleAddToCart(product)}
+                          >
+                            Add to Cart
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

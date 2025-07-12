@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// ✅ Firebase configuration from your Firebase Console
+// Firebase configuration from your Firebase Console
 const firebaseConfig = {
   apiKey: "AIzaSyADqejdHuBEc5B956ADLVYrRyGl3umHiH0",
   authDomain: "ecommerce-redux-store.firebaseapp.com",

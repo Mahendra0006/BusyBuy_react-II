@@ -17,6 +17,8 @@ const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items);
   const [isOpen, setIsOpen] = useState(false);
 
+  const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate("/signin");
@@ -73,9 +75,9 @@ const Navbar = () => {
               >
                 <FaShoppingCart />
                 Cart
-                {cartItems.length > 0 && (
+                {totalQuantity > 0 && (
                   <span className="badge bg-danger rounded-pill position-absolute top-0 start-100 translate-middle">
-                    {cartItems.length}
+                    {totalQuantity}
                   </span>
                 )}
               </Link>
