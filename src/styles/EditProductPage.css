@@ -1,0 +1,249 @@
+.edit-product-page {
+  background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+  min-height: 100vh;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.edit-title {
+  text-align: center;
+  color: #0d6efd;
+  margin-bottom: 30px;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #0d6efd;
+  outline: none;
+  background-color: #fff;
+}
+
+.image-upload-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-btn {
+  padding: 10px 12px;
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-btn:hover {
+  background-color: #084fc1;
+}
+
+.image-preview {
+  margin-top: 15px;
+}
+
+.image-preview img {
+  max-width: 180px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.update-btn {
+  margin-top: 30px;
+  width: 100%;
+  background-color: #0d6efd;
+  color: white;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: #0b5ed7;
+}
+
+.loading-text {
+  padding: 40px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #555;
+}
+
+/* Button styles */
+.product-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  padding: 15px 0;
+}
+
+.btn-style {
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-style:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #48bb78;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #38a169;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.btn-edit:hover {
+  background-color: #e0a800;
+}
+
+/* Price badge style */
+.price-badge {
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 15px 0;
+  display: inline-block;
+  min-width: 100px;
+  text-align: center;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #0d6efd;
+  outline: none;
+  background-color: #fff;
+}
+
+.image-upload-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.upload-btn {
+  padding: 10px 12px;
+  background-color: #0d6efd;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-btn:hover {
+  background-color: #084fc1;
+}
+
+.image-preview {
+  margin-top: 15px;
+}
+
+.image-preview img {
+  max-width: 180px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.update-btn {
+  margin-top: 30px;
+  width: 100%;
+  background-color: #0d6efd;
+  color: white;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.update-btn:hover {
+  background-color: #0b5ed7;
+}
+
+.loading-text {
+  padding: 40px;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #555;
+}

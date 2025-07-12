@@ -214,39 +214,42 @@ const HomePage = () => {
                       <img
                         src={
                           product.image ||
-                          "https://via.placeholder.com/300x200?text=No+Image"
+                          "https://via.placeholder.com/400x300?text=No+Image"
                         }
                         alt={product.title}
-                        className="hover-zoom"
+                        className="img-fluid"
                         onClick={() => {
                           setSelectedProduct(product);
                           setShowModal(true);
                         }}
                       />
                     </div>
+                    <div className="card-body d-flex flex-column justify-content-between">
+                      <div>
+                        <h5 className="card-title">{product.title}</h5>
+                        <p className="card-text">{product.description}</p>
+                      </div>
 
-                    {/* Card Body */}
-                    <div className="card-body d-flex flex-column">
-                      <h5 className="card-title text-truncate fw-semibold text-dark">
-                        {product.title}
-                      </h5>
-                      <p className="card-text text-muted small">
-                        {product.description}
-                      </p>
-                      <div className="bottom-section">
-                        <div className="price-container">
-                          <span className="price-badge text-white">
-                            ₹{product.price.toLocaleString()}
-                          </span>
+                      <div className="bottom-row mt-3">
+                        <div className="price-tag">
+                          ₹{product.price.toLocaleString()}
                         </div>
-                        <div className="button-container">
+                        <button
+                          className="btn btn-primary btn-sm rounded-pill"
+                          onClick={() => handleAddToCart(product)}
+                        >
+                          Add to Cart
+                        </button>
+                        {user && (
                           <button
-                            className="btn add-to-cart-btn rounded-pill"
-                            onClick={() => handleAddToCart(product)}
+                            className="btn btn-outline-secondary btn-sm rounded-pill"
+                            onClick={() =>
+                              navigate(`/edit-product/${product.id}`)
+                            }
                           >
-                            Add to Cart
+                            Edit
                           </button>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>

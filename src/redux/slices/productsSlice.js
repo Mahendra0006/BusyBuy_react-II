@@ -32,6 +32,40 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+// Edit an existing product
+export const editProduct = createAsyncThunk(
+  "products/editProduct",
+  async ({ id, product }, thunkAPI) => {
+    const { getState } = thunkAPI;
+    const { auth } = getState();
+    const { user } = auth;
+
+    if (!user) {
+      return thunkAPI.rejectWithValue("Please login to edit products");
+    }
+
+    try {
+      const productRef = doc(db, "products", id);
+      await updateDoc(productRef, {
+        ...product,
+        updatedAt: new Date().toISOString(),
+        addedBy: {
+          uid: user.uid,
+          email: user.email,
+        },
+      });
+
+      const docSnap = await getDoc(productRef);
+      return {
+        id: docSnap.id,
+        ...docSnap.data(),
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message || "Failed to edit product");
+    }
+  }
+);
+
 // Add a new product
 export const addProduct = createAsyncThunk(
   "products/addProduct",

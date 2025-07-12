@@ -7,6 +7,7 @@ import CartPage from "../pages/CartPage.jsx";
 import AddProductPage from "../pages/AddProductPage.jsx";
 import OrdersPage from "../pages/OrdersPage.jsx";
 import OrderDetailsPage from "../pages/OrderDetailsPage.jsx";
+import EditProductPage from "../pages/EditProductPage.jsx";
 import NotFoundPage from "../pages/NotFoundPage.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
 
@@ -44,6 +45,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <OrderDetailsPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path={ROUTES.EDIT_PRODUCT}
+      element={
+        <ProtectedRoute>
+          <EditProductPage />
         </ProtectedRoute>
       }
     />
